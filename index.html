@@ -15,10 +15,6 @@
         .font-urdu {
             font-family: 'Noto Nastaliq Urdu', serif;
         }
-        /* MODIFICATION: Used a large rem value for explicit and generous spacing */
-        .lesson-content {
-            line-height: 3.5rem; 
-        }
         .lesson-content b {
             background-color: #fef08a; padding: 2px 6px; border-radius: 4px;
             font-weight: 700; color: #713f12; cursor: pointer;
@@ -26,7 +22,7 @@
         .lesson-content .word-span { cursor: pointer; }
         .lesson-content .word-span:hover { background-color: #e0f2fe; }
         .dialogue-line {
-            margin-bottom: 1.5rem; /* MODIFICATION: Increased margin */
+            margin-bottom: 1.5rem;
         }
         .dialogue-speaker-1 { color: #1d4ed8; font-weight: bold; }
         .dialogue-speaker-2 { color: #be185d; font-weight: bold; }
@@ -54,7 +50,7 @@
         .table-style { width: 100%; border-collapse: collapse; }
         .table-style th, .table-style td {
             border: 1px solid #e2e8f0;
-            padding: 16px; /* MODIFICATION: Increased padding */
+            padding: 12px; 
             text-align: right;
         }
         .table-style th { background-color: #f1f5f9; }
@@ -65,7 +61,7 @@
         .flashcard-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; }
         .flashcard {
             background-color: white; border: 1px solid #e2e8f0; border-radius: 8px;
-            height: 120px; /* MODIFICATION: Increased height */
+            height: 100px; 
             perspective: 1000px; cursor: pointer;
         }
         .flashcard-inner {
@@ -81,19 +77,41 @@
         .flashcard-front { font-family: 'Noto Nastaliq Urdu', serif; }
         .flashcard-back { transform: rotateY(180deg); background-color: #f0f9ff; }
         /* Matching exercise styles */
-        .matching-container { display: flex; justify-content: space-around; gap: 1.5rem; } /* MODIFICATION: Increased gap */
-        .matching-column { display: flex; flex-direction: column; gap: 0.75rem; flex: 1; } /* MODIFICATION: Increased gap */
+        .matching-container { display: flex; justify-content: space-around; gap: 1rem; }
+        .matching-column { display: flex; flex-direction: column; gap: 0.5rem; flex: 1; }
         .match-item {
-            padding: 1rem; /* MODIFICATION: Increased padding */
+            padding: 0.75rem; 
             border: 2px solid #cbd5e1; border-radius: 6px;
             cursor: pointer; transition: all 0.2s; font-size: 1.1rem;
         }
         .match-item.selected { border-color: #3b82f6; background-color: #dbeafe; }
         .match-item.correct { border-color: #22c55e; background-color: #dcfce7; pointer-events: none; }
         .match-item.incorrect { border-color: #ef4444; background-color: #fee2e2; }
-        /* MODIFICATION: Add space between exercise items */
         .exercise {
-            margin-bottom: 1.5rem; /* MODIFICATION: Increased margin */
+            margin-bottom: 1rem; 
+        }
+        /* Alphabet styles */
+        .alphabet-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 0.75rem;
+            direction: rtl;
+        }
+        .letter-card {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 70px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+        .letter-card:hover {
+            background-color: #e0f2fe;
+            border-color: #3b82f6;
+            transform: scale(1.05);
         }
     </style>
 </head>
@@ -122,6 +140,7 @@
             
             <div class="mb-6 flex justify-center border-b flex-wrap">
                 <button id="nav-home" class="px-4 py-3 text-lg font-bold border-b-4 border-sky-600 text-sky-600">الرئيسية</button>
+                <button id="nav-alphabet" class="px-4 py-3 text-lg font-bold border-b-4 border-transparent text-slate-500 hover:text-sky-600">الحروف</button>
                 <button id="nav-history" class="px-4 py-3 text-lg font-bold border-b-4 border-transparent text-slate-500 hover:text-sky-600">سجل الدروس</button>
                 <button id="nav-learned" class="px-4 py-3 text-lg font-bold border-b-4 border-transparent text-slate-500 hover:text-sky-600">الكلمات المتعلمة</button>
                 <button id="nav-basket" class="px-4 py-3 text-lg font-bold border-b-4 border-transparent text-slate-500 hover:text-sky-600">سلة التعلم</button>
@@ -145,6 +164,8 @@
                 <button id="reset-progress-btn" class="mt-4 bg-red-500 text-white px-4 py-2 rounded-md text-sm hover:bg-red-600 transition">إعادة تعيين التقدم</button>
             </div>
 
+            <div id="alphabet-screen" class="hidden p-4 bg-white rounded-lg shadow-md"></div>
+            
             <div id="history-screen" class="hidden p-4 bg-white rounded-lg shadow-md space-y-3">
                 <h2 class="text-2xl font-bold mb-4 text-center">الدروس السابقة</h2>
                 <div id="history-list" class="space-y-2"></div>
@@ -156,11 +177,10 @@
 
             <div id="loading-screen" class="hidden text-center p-8 bg-white rounded-lg shadow-md">
                 <div class="flex justify-center mb-4"><div class="loader"></div></div>
-                <p class="text-slate-600 text-lg">الذكاء الاصطناعي يكتب قصتك... يرجى الانتظار.</p>
+                <p class="text-slate-600 text-lg">الذكاء الاصطناعي يعمل... يرجى الانتظار.</p>
             </div>
 
-            <!-- MODIFICATION: Increased spacing with space-y-8 -->
-            <div id="lesson-screen" class="hidden space-y-8"></div>
+            <div id="lesson-screen" class="hidden space-y-6"></div>
         </main>
 
         <div id="selection-popup" class="hidden absolute bg-white border rounded-lg shadow-xl p-1 flex gap-1 z-50">
@@ -172,6 +192,7 @@
     </div>
 
     <script>
+        const urduAlphabet = ['ا', 'ب', 'پ', 'ت', 'ٹ', 'ث', 'ج', 'چ', 'ح', 'خ', 'د', 'ڈ', 'ذ', 'ر', 'ڑ', 'ز', 'ژ', 'س', 'ش', 'ص', 'ض', 'ط', 'ظ', 'ع', 'غ', 'ف', 'ق', 'ک', 'گ', 'ل', 'م', 'ن', 'ں', 'و', 'ہ', 'ھ', 'ء', 'ی', 'ے'];
         const a1UrduWords = [
             'میں', 'تم', 'آپ', 'یہ', 'وہ', 'ہم', 'کون', 'کیا', 'کہاں', 'کب', 'کیسے', 'کیوں', 'میرا', 'تمہارا', 'آپکا', 'اسکا', 'ہمارا', 'انکا', 'کوئی', 'سب', 'ہر کوئی',
             'آدمی', 'عورت', 'لڑکا', 'لڑکی', 'بچہ', 'بچے', 'دوست', 'دشمن', 'خاندان', 'والد', 'والدہ', 'ماں', 'باپ', 'بھائی', 'بہن', 'شوہر', 'بیوی', 'بیٹا', 'بیٹی', 'لوگ', 'رشتے دار',
@@ -192,7 +213,7 @@
             'میں', 'پر', 'سے', 'تک', 'کو', 'کا', 'کی', 'کے', 'لیے', 'کی طرف', 'کے بارے میں', 'کے ساتھ', 'کے بغیر', 'کے نیچے', 'کے اوپر', 'کے سامنے', 'کے پیچھے', 'کے اندر', 'کے باہر',
             'اور', 'لیکن', 'مگر', 'پر', 'یا', 'تو', 'پھر', 'کیونکہ', 'اس لیے', 'تاکہ', 'اگر', 'جبکہ', 'حالانکہ', 'کہ',
             'ہاں', 'جی', 'نہیں', 'جی نہیں', 'ٹھیک ہے', 'بہت اچھا', 'شکریہ', 'مہربانی', 'خوش آمدید', 'معاف کیجئے', 'کوئی بات نہیں', 'السلام علیکم', 'وعلیکم السلام', 'خدا حافظ', 'اللہ حافظ', 'صبح بخیر', 'شام بخیر', 'شب بخیر', 'الوداع', 'مبارک ہو', 'افسوس', 'شاباش', 'ارے', 'اوہ', 'اف',
-            'میرا نام علی ہے', 'آپ کیسے ہیں', 'میں ٹھیک ہوں', 'آپ کا نام کیا ہے', 'آپ کہاں سے ہیں', 'وقت کیا ہوا ہے', 'یہ کتنے کا ہے', 'مجھے یہ چاہیے', 'مجھے نہیں معلوم', 'کیا آپ میری مدد کر सकते ہیں', 'مجھے بھوک لگی ہے', 'مجھے پیاس لگی ہے'
+            'میرا نام علی ہے', 'آپ کیسے ہیں', 'میں ٹھیک ہوں', 'آپ کا نام کیا ہے', 'آپ کہاں سے ہیں', 'وقت کیا ہوا ہے', 'یہ کتنے کا ہے', 'مجھے یہ چاہیے', 'مجھے نہیں معلوم', 'کیا آپ میری مدد کر سکتے ہیں', 'مجھے بھوک لگی ہے', 'مجھے پیاس لگی ہے'
         ];
         const ttsVoices = ['Zephyr', 'Puck', 'Charon', 'Kore', 'Fenrir', 'Leda', 'Orus', 'Aoede', 'Callirrhoe', 'Autonoe', 'Enceladus', 'Iapetus', 'Umbriel', 'Algieba', 'Despina', 'Erinome', 'Algenib', 'Rasalgethi', 'Laomedeia', 'Achernar', 'Alnilam', 'Schedar', 'Gacrux', 'Pulcherrima', 'Achird', 'Zubenelgenubi', 'Vindemiatrix', 'Sadachbia', 'Sadaltager', 'Sulafat'];
 
@@ -202,10 +223,12 @@
             saveApiKeyBtn: document.getElementById('save-api-key-btn'),
             mainContent: document.getElementById('main-content'),
             navHome: document.getElementById('nav-home'),
+            navAlphabet: document.getElementById('nav-alphabet'),
             navHistory: document.getElementById('nav-history'),
             navLearned: document.getElementById('nav-learned'),
             navBasket: document.getElementById('nav-basket'),
             homeScreen: document.getElementById('home-screen'),
+            alphabetScreen: document.getElementById('alphabet-screen'),
             historyScreen: document.getElementById('history-screen'),
             learnedWordsScreen: document.getElementById('learned-words-screen'),
             basketScreen: document.getElementById('basket-screen'),
@@ -248,11 +271,13 @@
             allDOMElements.newLessonBtn.addEventListener('click', handleNewLesson);
             allDOMElements.resetProgressBtn.addEventListener('click', handleResetProgress);
             allDOMElements.navHome.addEventListener('click', () => showTab('home'));
+            allDOMElements.navAlphabet.addEventListener('click', () => showTab('alphabet'));
             allDOMElements.navHistory.addEventListener('click', () => showTab('history'));
             allDOMElements.navLearned.addEventListener('click', () => showTab('learned'));
             allDOMElements.navBasket.addEventListener('click', () => showTab('basket'));
 
             document.body.addEventListener('mouseup', handleTextSelection);
+            document.body.addEventListener('touchend', handleTextSelection); // Added for mobile
             document.body.addEventListener('mousedown', (e) => {
                 if (!allDOMElements.selectionPopup.contains(e.target)) {
                     allDOMElements.selectionPopup.classList.add('hidden');
@@ -288,39 +313,43 @@
         }
 
         function showScreen(screen) {
-            allDOMElements.homeScreen.classList.add('hidden');
-            allDOMElements.historyScreen.classList.add('hidden');
-            allDOMElements.learnedWordsScreen.classList.add('hidden');
-            allDOMElements.basketScreen.classList.add('hidden');
-            allDOMElements.loadingScreen.classList.add('hidden');
-            allDOMElements.lessonScreen.classList.add('hidden');
+            const screens = [
+                allDOMElements.homeScreen, allDOMElements.alphabetScreen, allDOMElements.historyScreen,
+                allDOMElements.learnedWordsScreen, allDOMElements.basketScreen, allDOMElements.loadingScreen,
+                allDOMElements.lessonScreen
+            ];
+            screens.forEach(s => s.classList.add('hidden'));
             if (screen) screen.classList.remove('hidden');
         }
 
         function showTab(tabName) {
             showScreen(null);
-            const navs = [allDOMElements.navHome, allDOMElements.navHistory, allDOMElements.navLearned, allDOMElements.navBasket];
-            navs.forEach(nav => nav.classList.remove('border-sky-600', 'text-sky-600'));
+            const navs = [allDOMElements.navHome, allDOMElements.navAlphabet, allDOMElements.navHistory, allDOMElements.navLearned, allDOMElements.navBasket];
+            navs.forEach(nav => {
+                nav.classList.remove('border-sky-600', 'text-sky-600');
+                nav.classList.add('border-transparent', 'text-slate-500');
+            });
+
+            const activeNav = document.getElementById(`nav-${tabName}`);
+            if (activeNav) {
+                activeNav.classList.remove('border-transparent', 'text-slate-500');
+                activeNav.classList.add('border-sky-600', 'text-sky-600');
+            }
 
             if (tabName === 'home') {
-                if (isLessonActive) {
-                    allDOMElements.lessonScreen.classList.remove('hidden');
-                } else {
-                    allDOMElements.homeScreen.classList.remove('hidden');
-                }
-                allDOMElements.navHome.classList.add('border-sky-600', 'text-sky-600');
+                showScreen(isLessonActive ? allDOMElements.lessonScreen : allDOMElements.homeScreen);
+            } else if (tabName === 'alphabet') {
+                renderAlphabetScreen();
+                showScreen(allDOMElements.alphabetScreen);
             } else if (tabName === 'history') {
                 renderHistory();
-                allDOMElements.historyScreen.classList.remove('hidden');
-                allDOMElements.navHistory.classList.add('border-sky-600', 'text-sky-600');
+                showScreen(allDOMElements.historyScreen);
             } else if (tabName === 'learned') {
                 renderLearnedWords();
-                allDOMElements.learnedWordsScreen.classList.remove('hidden');
-                allDOMElements.navLearned.classList.add('border-sky-600', 'text-sky-600');
+                showScreen(allDOMElements.learnedWordsScreen);
             } else if (tabName === 'basket') {
                 renderBasket();
-                allDOMElements.basketScreen.classList.remove('hidden');
-                allDOMElements.navBasket.classList.add('border-sky-600', 'text-sky-600');
+                showScreen(allDOMElements.basketScreen);
             }
         }
 
@@ -349,7 +378,7 @@
                 if (e.target.classList.contains('modal-close') || e.target === modalOverlay) {
                     modalOverlay.remove();
                 }
-                actions.forEach((action, index) => {
+                actions.forEach((action) => {
                     const buttonClass = action.class.split(' ')[0];
                     if (e.target.classList.contains(buttonClass)) {
                         action.callback();
@@ -466,8 +495,18 @@
             const lessonTitle = isRevision ? 'مراجعة النص' : '1. النص';
             const wordsTitle = isRevision ? 'كلمات للمراجعة' : '2. الكلمات الجديدة';
 
+            const storySection = `
+                <div id="story-container" class="text-2xl font-urdu lesson-content" data-mood="${data.story_mood || 'neutral'}">
+                    ${formatStory(data.story, data.story_type)}
+                </div>
+                <div class="flex items-center justify-center gap-4 mt-4 pt-4 border-t">
+                    <label for="line-height-slider" class="text-sm text-slate-600">تباعد الأسطر:</label>
+                    <input type="range" id="line-height-slider" min="1.5" max="4" step="0.1" value="2.8" class="w-40 cursor-pointer">
+                </div>
+            `;
+
             allDOMElements.lessonScreen.innerHTML = `
-                ${createSection(lessonTitle, `<div id="story-container" class="text-2xl font-urdu lesson-content" data-mood="${data.story_mood || 'neutral'}">${formatStory(data.story, data.story_type)}</div>`)}
+                ${createSection(lessonTitle, storySection)}
                 ${createSection(wordsTitle, createTable(data.new_words, ['الكلمة', 'المعنى'], 'word', 'translation'))}
                 ${createSection('3. قواعد نستفيدها', renderGrammarSection(data.grammar_focus))}
                 ${createSection('4. تراكيب مفيدة', createTable(data.useful_structures, ['التركيب', 'الاستخدام'], 'structure', 'explanation'))}
@@ -478,6 +517,15 @@
                     <button id="next-lesson-btn" class="bg-sky-600 text-white px-6 py-2 rounded-md hover:bg-sky-700 transition">درس جديد بكلمات جديدة</button>
                 </div>
             `;
+            
+            const slider = document.getElementById('line-height-slider');
+            const storyContainer = document.getElementById('story-container');
+            
+            storyContainer.style.lineHeight = slider.value;
+            slider.addEventListener('input', (e) => {
+                storyContainer.style.lineHeight = e.target.value;
+            });
+
             document.getElementById('rewrite-btn').addEventListener('click', () => generateLesson(data.learnedWords || data.new_words.map(w => w.word), true, isRevision));
             document.getElementById('next-lesson-btn').addEventListener('click', handleNewLesson);
             document.getElementById('check-answers-btn').addEventListener('click', checkAnswers);
@@ -535,7 +583,7 @@
 
         function formatStory(story, type) {
             const wrappedStory = wrapWordsInSpans(story);
-            if (type !== 'mukalma') return wrappedStory; // mukalma for dialogue
+            if (type !== 'mukalma') return wrappedStory;
             
             const speakers = [];
             const lines = wrappedStory.split(/\n|<br>|<br\/>/g);
@@ -671,12 +719,12 @@
             const selection = window.getSelection();
             let selectedText = selection.toString().trim();
             
-            if (!selectedText) {
+            if (!selectedText || selectedText.length > 150) { // Don't show for empty or very long selections
                 allDOMElements.selectionPopup.classList.add('hidden');
                 return;
             }
             
-            if (selectedText.length > 0 && allDOMElements.lessonScreen.contains(selection.anchorNode)) {
+            if (allDOMElements.lessonScreen.contains(selection.anchorNode)) {
                 const range = selection.getRangeAt(0);
                 const rect = range.getBoundingClientRect();
                 
@@ -717,6 +765,7 @@
         
         async function callGeminiForSimpleText(prompt) {
             if (!apiKey) { showModal('الرجاء حفظ مفتاح Gemini API أولاً.'); return null; }
+            showScreen(allDOMElements.loadingScreen);
             try {
                 const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`, {
                     method: 'POST',
@@ -725,10 +774,12 @@
                 });
                 if (!response.ok) throw new Error('API Error');
                 const result = await response.json();
+                showTab(document.querySelector('[id^="nav-"][class*="border-sky-600"]').id.split('-')[1]); // Return to active tab
                 return result.candidates[0].content.parts[0].text.trim();
             } catch (error) {
                 console.error('Error with simple text generation:', error);
                 showModal('حدث خطأ أثناء التواصل مع الذكاء الاصطناعي.');
+                showTab(document.querySelector('[id^="nav-"][class*="border-sky-600"]').id.split('-')[1]); // Return to active tab
                 return null;
             }
         }
@@ -972,6 +1023,94 @@
                 saveState();
                 updateProgress();
                 showTab('home');
+            }
+        }
+
+        // --- Alphabet Feature Functions ---
+        function renderAlphabetScreen() {
+            const container = allDOMElements.alphabetScreen;
+            const alphabetHtml = urduAlphabet.map(letter => `
+                <div class="letter-card font-urdu" data-letter="${letter}">
+                    ${letter}
+                </div>
+            `).join('');
+
+            container.innerHTML = `
+                <h2 class="text-2xl font-bold mb-4 text-center">الأبجدية الأردية</h2>
+                <p class="text-center text-slate-500 mb-6">اضغط على أي حرف لسماع نطقه وتعلم المزيد عنه.</p>
+                <div class="alphabet-grid">${alphabetHtml}</div>
+            `;
+            
+            container.querySelectorAll('.letter-card').forEach(card => {
+                card.addEventListener('click', handleLetterClick);
+            });
+        }
+
+        function handleLetterClick(event) {
+            const letter = event.currentTarget.dataset.letter;
+            getLetterInfo(letter);
+        }
+
+        async function getLetterInfo(letter) {
+            const prompt = `
+            You are an expert Urdu teacher for Arabic speakers.
+            Your task is to provide information about a single Urdu letter.
+            The letter is: "${letter}"
+
+            **RULES:**
+            1.  Provide the information in a clear, simple format for a beginner.
+            2.  The entire response must be a single, valid JSON object.
+            3.  All text values in the JSON must be in Arabic, except for the letter and example word.
+
+            **Required JSON Structure:**
+            {
+              "letter_name": "اسم الحرف (مثلاً: الف)",
+              "pronunciation_guide": "شرح لكيفية نطق الحرف، مع مقارنته بصوت عربي مشابه إن أمكن.",
+              "example_word": "كلمة مثال تبدأ بالحرف (بالأردية)",
+              "example_word_translation": "ترجمة كلمة المثال (بالعربية)"
+            }
+            `;
+            
+            showScreen(allDOMElements.loadingScreen);
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                });
+                if (!response.ok) throw new Error('API Error');
+                const result = await response.json();
+                const text = result.candidates[0].content.parts[0].text;
+                const jsonString = text.replace(/```json/g, '').replace(/```/g, '').trim();
+                const letterData = JSON.parse(jsonString);
+
+                showTab('alphabet'); // Return to alphabet tab
+                
+                const modalContent = `
+                    <div class="text-right space-y-4">
+                        <p><strong class="font-bold">اسم الحرف:</strong> ${letterData.letter_name}</p>
+                        <p><strong class="font-bold">كيفية النطق:</strong> ${letterData.pronunciation_guide}</p>
+                        <hr>
+                        <p class="text-lg"><strong class="font-bold">مثال:</strong> <span class="font-urdu text-2xl">${letterData.example_word}</span> (${letterData.example_word_translation})</p>
+                    </div>
+                `;
+                
+                const actions = [{
+                    text: `🔊 نطق الحرف`,
+                    class: 'speak-letter-btn bg-sky-500 text-white hover:bg-sky-600',
+                    callback: () => speakText(letter)
+                }, {
+                    text: `🔊 نطق المثال`,
+                    class: 'speak-example-btn bg-green-500 text-white hover:bg-green-600',
+                    callback: () => speakText(letterData.example_word)
+                }];
+
+                showModal(modalContent, `تعلم حرف <span class="font-urdu text-3xl">${letter}</span>`, actions);
+
+            } catch (error) {
+                console.error('Error getting letter info:', error);
+                showTab('alphabet');
+                showModal('حدث خطأ أثناء جلب معلومات الحرف.');
             }
         }
 
