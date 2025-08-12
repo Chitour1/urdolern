@@ -251,6 +251,7 @@
         let remainingWords = [...a1UrduWords];
         let audioContext;
         let isLessonActive = false;
+        let selectionTimeout;
         
         function initialize() {
             try {
@@ -276,15 +277,57 @@
             allDOMElements.navLearned.addEventListener('click', () => showTab('learned'));
             allDOMElements.navBasket.addEventListener('click', () => showTab('basket'));
 
-            document.body.addEventListener('mouseup', handleTextSelection);
-            document.body.addEventListener('touchend', handleTextSelection); // Added for mobile
+            // Improved text selection handling for both desktop and mobile
             document.body.addEventListener('mousedown', (e) => {
                 if (!allDOMElements.selectionPopup.contains(e.target)) {
                     allDOMElements.selectionPopup.classList.add('hidden');
                 }
             });
+            document.body.addEventListener('touchstart', () => {
+                 allDOMElements.selectionPopup.classList.add('hidden');
+            }, { passive: true });
+            
+            document.body.addEventListener('mouseup', handleSelectionEnd);
+            document.body.addEventListener('touchend', handleSelectionEnd);
+            
             allDOMElements.lessonScreen.addEventListener('click', handleWordClick);
         }
+
+        function handleSelectionEnd() {
+            clearTimeout(selectionTimeout);
+            selectionTimeout = setTimeout(() => {
+                const selection = window.getSelection();
+                const selectedText = selection.toString().trim();
+                
+                if (selectedText.length > 0 && selectedText.length < 150) {
+                     // Check if selection is within the lesson screen to avoid triggering everywhere
+                    if (allDOMElements.lessonScreen.contains(selection.anchorNode)) {
+                        showSelectionPopup(selection);
+                    }
+                } else {
+                    allDOMElements.selectionPopup.classList.add('hidden');
+                }
+            }, 100); // Delay to allow selection to finalize on mobile
+        }
+
+        function showSelectionPopup(selection) {
+            const range = selection.getRangeAt(0);
+            const rect = range.getBoundingClientRect();
+            
+            allDOMElements.selectionPopup.style.left = `${rect.left + window.scrollX + (rect.width / 2) - (allDOMElements.selectionPopup.offsetWidth / 2)}px`;
+            allDOMElements.selectionPopup.style.top = `${rect.top + window.scrollY - allDOMElements.selectionPopup.offsetHeight - 10}px`;
+            allDOMElements.selectionPopup.classList.remove('hidden');
+
+            const selectedText = selection.toString().trim();
+            const storyContainer = document.getElementById('story-container');
+            const mood = storyContainer ? storyContainer.dataset.mood : 'neutral';
+
+            document.getElementById('popup-translate').onclick = () => { getTranslation(selectedText); allDOMElements.selectionPopup.classList.add('hidden'); };
+            document.getElementById('popup-speak').onclick = () => { speakText(selectedText, mood); allDOMElements.selectionPopup.classList.add('hidden'); };
+            document.getElementById('popup-phonetics').onclick = () => { getPhonetics(selectedText); allDOMElements.selectionPopup.classList.add('hidden'); };
+            document.getElementById('popup-save').onclick = () => { saveToBasket(selectedText); allDOMElements.selectionPopup.classList.add('hidden'); };
+        }
+
 
         function loadState() {
             apiKey = localStorage.getItem('geminiApiKey_ur') || '';
@@ -367,9 +410,9 @@
                 <div class="modal-content">
                     <h3 class="text-xl font-bold mb-4">${title}</h3>
                     <div>${content}</div>
-                    <div class="mt-6 flex gap-3 justify-center">
+                    <div class="mt-6 flex gap-3 justify-center flex-wrap">
                         ${actionsHtml}
-                        <button class="modal-close bg-sky-600 text-white px-6 py-2 rounded-md hover:bg-sky-700">موافق</button>
+                        <button class="modal-close bg-slate-500 text-white px-6 py-2 rounded-md hover:bg-slate-600">إغلاق</button>
                     </div>
                 </div>`;
             document.body.appendChild(modalOverlay);
@@ -382,7 +425,9 @@
                     const buttonClass = action.class.split(' ')[0];
                     if (e.target.classList.contains(buttonClass)) {
                         action.callback();
-                        modalOverlay.remove();
+                        if (!action.keepOpen) { // Only close if keepOpen is not true
+                            modalOverlay.remove();
+                        }
                     }
                 });
             });
@@ -482,10 +527,13 @@
             }
         }
         
-        function createSection(title, content) {
+        function createSection(title, content, titleControls = '') {
             return `
                 <div class="p-5 bg-white rounded-lg shadow-md">
-                    <h3 class="text-xl font-bold mb-4 text-sky-700">${title}</h3>
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-bold text-sky-700">${title}</h3>
+                        <div>${titleControls}</div>
+                    </div>
                     ${content}
                 </div>
             `;
@@ -495,7 +543,13 @@
             const lessonTitle = isRevision ? 'مراجعة النص' : '1. النص';
             const wordsTitle = isRevision ? 'كلمات للمراجعة' : '2. الكلمات الجديدة';
 
-            const storySection = `
+            const storyControls = `
+                <button id="read-story-btn" title="قراءة النص كاملاً" class="p-2 hover:bg-slate-200 rounded-full transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-sky-600"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                </button>
+            `;
+
+            const storyContent = `
                 <div id="story-container" class="text-2xl font-urdu lesson-content" data-mood="${data.story_mood || 'neutral'}">
                     ${formatStory(data.story, data.story_type)}
                 </div>
@@ -506,7 +560,7 @@
             `;
 
             allDOMElements.lessonScreen.innerHTML = `
-                ${createSection(lessonTitle, storySection)}
+                ${createSection(lessonTitle, storyContent, storyControls)}
                 ${createSection(wordsTitle, createTable(data.new_words, ['الكلمة', 'المعنى'], 'word', 'translation'))}
                 ${createSection('3. قواعد نستفيدها', renderGrammarSection(data.grammar_focus))}
                 ${createSection('4. تراكيب مفيدة', createTable(data.useful_structures, ['التركيب', 'الاستخدام'], 'structure', 'explanation'))}
@@ -524,6 +578,11 @@
             storyContainer.style.lineHeight = slider.value;
             slider.addEventListener('input', (e) => {
                 storyContainer.style.lineHeight = e.target.value;
+            });
+
+            document.getElementById('read-story-btn').addEventListener('click', () => {
+                const storyText = storyContainer.textContent.trim();
+                if (storyText) speakText(storyText);
             });
 
             document.getElementById('rewrite-btn').addEventListener('click', () => generateLesson(data.learnedWords || data.new_words.map(w => w.word), true, isRevision));
@@ -714,33 +773,6 @@
                 }
             }
         }
-
-        function handleTextSelection(event) {
-            const selection = window.getSelection();
-            let selectedText = selection.toString().trim();
-            
-            if (!selectedText || selectedText.length > 150) { // Don't show for empty or very long selections
-                allDOMElements.selectionPopup.classList.add('hidden');
-                return;
-            }
-            
-            if (allDOMElements.lessonScreen.contains(selection.anchorNode)) {
-                const range = selection.getRangeAt(0);
-                const rect = range.getBoundingClientRect();
-                
-                allDOMElements.selectionPopup.style.left = `${rect.left + window.scrollX + (rect.width / 2) - (allDOMElements.selectionPopup.offsetWidth / 2)}px`;
-                allDOMElements.selectionPopup.style.top = `${rect.top + window.scrollY - allDOMElements.selectionPopup.offsetHeight - 10}px`;
-                allDOMElements.selectionPopup.classList.remove('hidden');
-
-                const storyContainer = document.getElementById('story-container');
-                const mood = storyContainer ? storyContainer.dataset.mood : 'neutral';
-
-                document.getElementById('popup-translate').onclick = () => { getTranslation(selectedText); allDOMElements.selectionPopup.classList.add('hidden'); };
-                document.getElementById('popup-speak').onclick = () => { speakText(selectedText, mood); allDOMElements.selectionPopup.classList.add('hidden'); };
-                document.getElementById('popup-phonetics').onclick = () => { getPhonetics(selectedText); allDOMElements.selectionPopup.classList.add('hidden'); };
-                document.getElementById('popup-save').onclick = () => { saveToBasket(selectedText); allDOMElements.selectionPopup.classList.add('hidden'); };
-            }
-        }
         
         async function getTranslation(text) {
             const prompt = `Translate the Urdu text "${text}" into a simple, direct Arabic equivalent. Provide only the translation, nothing else.`;
@@ -821,7 +853,7 @@
                     `).join('')}
                    </div>`;
             
-            container.innerHTML = createSection('الكلمات التي تعلمتها', buttonHtml + wordsHtml);
+            container.innerHTML = createSection('الكلمات التي تعلمتها', wordsHtml, buttonHtml);
 
             if (learnedWords.length >= 15) {
                 document.getElementById('review-lesson-btn').addEventListener('click', handleRevisionLesson);
@@ -1035,11 +1067,10 @@
                 </div>
             `).join('');
 
-            container.innerHTML = `
-                <h2 class="text-2xl font-bold mb-4 text-center">الأبجدية الأردية</h2>
-                <p class="text-center text-slate-500 mb-6">اضغط على أي حرف لسماع نطقه وتعلم المزيد عنه.</p>
-                <div class="alphabet-grid">${alphabetHtml}</div>
-            `;
+            container.innerHTML = createSection(
+                'الأبجدية الأردية',
+                '<p class="text-center text-slate-500 mb-6">اضغط على أي حرف لسماع نطقه وتعلم المزيد عنه.</p>' + `<div class="alphabet-grid">${alphabetHtml}</div>`
+            );
             
             container.querySelectorAll('.letter-card').forEach(card => {
                 card.addEventListener('click', handleLetterClick);
@@ -1098,11 +1129,13 @@
                 const actions = [{
                     text: `🔊 نطق الحرف`,
                     class: 'speak-letter-btn bg-sky-500 text-white hover:bg-sky-600',
-                    callback: () => speakText(letter)
+                    callback: () => speakText(letter),
+                    keepOpen: true
                 }, {
                     text: `🔊 نطق المثال`,
                     class: 'speak-example-btn bg-green-500 text-white hover:bg-green-600',
-                    callback: () => speakText(letterData.example_word)
+                    callback: () => speakText(letterData.example_word),
+                    keepOpen: true
                 }];
 
                 showModal(modalContent, `تعلم حرف <span class="font-urdu text-3xl">${letter}</span>`, actions);
