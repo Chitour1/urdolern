@@ -15,9 +15,9 @@
         .font-urdu {
             font-family: 'Noto Nastaliq Urdu', serif;
         }
-        /* MODIFICATION: Increased line-height for readability */
+        /* MODIFICATION: Used a large rem value for explicit and generous spacing */
         .lesson-content {
-            line-height: 2.5;
+            line-height: 3.5rem; 
         }
         .lesson-content b {
             background-color: #fef08a; padding: 2px 6px; border-radius: 4px;
@@ -26,7 +26,7 @@
         .lesson-content .word-span { cursor: pointer; }
         .lesson-content .word-span:hover { background-color: #e0f2fe; }
         .dialogue-line {
-            margin-bottom: 1rem; /* MODIFICATION: Increased margin */
+            margin-bottom: 1.5rem; /* MODIFICATION: Increased margin */
         }
         .dialogue-speaker-1 { color: #1d4ed8; font-weight: bold; }
         .dialogue-speaker-2 { color: #be185d; font-weight: bold; }
@@ -93,7 +93,7 @@
         .match-item.incorrect { border-color: #ef4444; background-color: #fee2e2; }
         /* MODIFICATION: Add space between exercise items */
         .exercise {
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem; /* MODIFICATION: Increased margin */
         }
     </style>
 </head>
@@ -159,7 +159,8 @@
                 <p class="text-slate-600 text-lg">الذكاء الاصطناعي يكتب قصتك... يرجى الانتظار.</p>
             </div>
 
-            <div id="lesson-screen" class="hidden space-y-6"></div>
+            <!-- MODIFICATION: Increased spacing with space-y-8 -->
+            <div id="lesson-screen" class="hidden space-y-8"></div>
         </main>
 
         <div id="selection-popup" class="hidden absolute bg-white border rounded-lg shadow-xl p-1 flex gap-1 z-50">
@@ -465,7 +466,6 @@
             const lessonTitle = isRevision ? 'مراجعة النص' : '1. النص';
             const wordsTitle = isRevision ? 'كلمات للمراجعة' : '2. الكلمات الجديدة';
 
-            // MODIFICATION: Removed text-2xl/relaxed to use custom line-height from CSS
             allDOMElements.lessonScreen.innerHTML = `
                 ${createSection(lessonTitle, `<div id="story-container" class="text-2xl font-urdu lesson-content" data-mood="${data.story_mood || 'neutral'}">${formatStory(data.story, data.story_type)}</div>`)}
                 ${createSection(wordsTitle, createTable(data.new_words, ['الكلمة', 'المعنى'], 'word', 'translation'))}
