@@ -15,12 +15,12 @@
         .font-urdu {
             font-family: 'Noto Nastaliq Urdu', serif;
         }
-        .lesson-content b {
-            background-color: #fef08a; padding: 2px 6px; border-radius: 4px;
-            font-weight: 700; color: #713f12; cursor: pointer;
+        .lesson-content b, .lesson-content .word-span {
+             cursor: pointer;
         }
-        .lesson-content .word-span { cursor: pointer; }
-        .lesson-content .word-span:hover { background-color: #e0f2fe; }
+        .lesson-content b:hover, .lesson-content .word-span:hover {
+            background-color: #e0f2fe;
+        }
         .dialogue-line {
             margin-bottom: 1.5rem;
         }
@@ -34,9 +34,6 @@
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
-        }
-        #selection-popup button {
-            background: none; border: none; cursor: pointer; font-size: 14px; font-family: 'Cairo', sans-serif;
         }
         .modal-overlay {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
@@ -206,7 +203,7 @@
             'نام', 'کام', 'بات', 'زبان', 'اردو', 'انگریزی', 'مطلب', 'معنی', 'سوال', 'جواب', 'مدد', 'ضرورت', 'خواہش', 'پیار', 'محبت', 'عشق', 'نفرت', 'خوشی', 'غم', 'غصہ', 'ڈر', 'خوف', 'امید', 'یقین', 'شک', 'زندگی', 'موت', 'شادی', 'طلاق', 'جشن', 'موسم', 'گرمی', 'سردی', 'بہار', 'خزاں', 'بارش', 'برف', 'طوفان', 'ہوا', 'آگ', 'آواز', 'شور', 'خاموشی', 'روشنی', 'اندھیرا', 'سچ', 'جھوٹ', 'خواب', 'حقیقت', 'علم', 'جہالت', 'انصاف', 'ظلم', 'آزادی', 'غلامی', 'صحت', 'بیماری', 'کامیابی', 'ناکامی', 'امن', 'جنگ', 'مذہب', 'اسلام', 'قانون', 'سیاست', 'تاریخ', 'جغرافیہ', 'سائنس', 'فن', 'موسیقی', 'کھیل', 'قسمت', 'موقع', 'غلطی', 'خیال', 'سوچ', 'وجہ', 'نتیجہ', 'فرق', 'شکل', 'سائز',
             'اچھا', 'برا', 'بڑا', 'چھوٹا', 'نیا', 'پرانا', 'خوبصورت', 'بدصورت', 'لمبا', 'پست قد', 'موٹا', 'پتلا', 'دبلا', 'گرم', 'ٹھنڈا', 'خوش', 'اداس', 'ناراض', 'بیمار', 'صحت مند', 'امیر', 'غریب', 'آسان', 'مشکل', 'کٹھن', 'صحیح', 'غلط', 'صاف', 'گندا', 'خالی', 'بھرا', 'تیز', 'آہستہ', 'مضبوط', 'کمزور', 'سستا', 'مہنگا', 'میٹھا', 'کڑوا', 'نمکین', 'پھیکا', 'تیار', 'مصروف', 'فارغ', 'زندہ', 'مردہ', 'اکیلا', 'شادی شدہ', 'کنوارہ', 'ذہین', 'بیوقوف', 'بہادر', 'بزدل', 'ایماندار', 'بے ایمان', 'محنتی', 'سست', 'کاہل', 'دلچسپ', 'بورنگ', 'ضروری', 'غیر ضروری', 'خاص', 'عام', 'مشہور', 'گمنام', 'تازہ', 'باسی', 'گہرا', 'ہلکا', 'گیلا', 'خشک', 'سخت', 'نرم', 'سیدھا', 'ٹیڑھا', 'گول', 'چوکور', 'پاگل', 'عقلمند',
             'جسم', 'سر', 'بال', 'چہرہ', 'آنکھ', 'ناک', 'منہ', 'زبان', 'دانت', 'ہونٹ', 'کان', 'گردن', 'کندھا', 'ہاتھ', 'بازو', 'انگلی', 'ناخن', 'سینہ', 'پیٹ', 'کمر', 'پاؤں', 'ٹانگ', 'گھٹنا', 'دل', 'دماغ', 'خون', 'ہڈی', 'جلد',
-            'آسمان', 'سورج', 'چاند', 'ستارہ', 'زمین', 'دریا', 'ندی', 'سمندر', 'جھیل', 'پہاڑ', 'چٹان', 'جنگل', 'صحرا', 'میدان', 'جانور', 'پرندہ', 'شیر', 'چیتا', 'ہاتھی', 'گھوڑا', 'کتا', 'بلی', 'گائے', 'بھینس', 'بکری', 'سانپ', 'مور', 'طوطا', 'کبوتر', 'پھول', 'گلاب', 'درخت', 'پودا', 'پتا', 'گھاس',
+            'آسمان', 'سورج', 'چاند', 'ستارہ', 'زمین', 'دریا', 'ندی', 'سمندر', 'جھیل', 'پہاڑ', 'چٹان', 'جنگل', 'صحرا', 'میدان', 'جانور', 'پرندہ', 'шیر', 'چیتا', 'ہاتھی', 'گھوڑا', 'کتا', 'بلی', 'گائے', 'بھینس', 'بکری', 'سانپ', 'مور', 'طوطا', 'کبوتر', 'پھول', 'گلاب', 'درخت', 'پودا', 'پتا', 'گھاس',
             'سرخ', 'لال', 'نیلا', 'پیلا', 'سبز', 'کالا', 'سفید', 'گلابی', 'نارنجی', 'جامنی', 'بھورا', 'سرمئی', 'سنہرا', 'چاندی',
             'ہونا', 'کرنا', 'جانا', 'آنا', 'دیکھنا', 'بولنا', 'کہنا', 'سننا', 'پڑھنا', 'لکھنا', 'سونا', 'جاگنا', 'اٹھنا', 'بیٹھنا', 'کھڑا ہونا', 'چلنا', 'دوڑنا', 'اڑنا', 'تیرنا', 'پینا', 'کھانا', 'پکانا', 'رکھنا', 'اٹھانا', 'دینا', 'لینا', 'چاہنا', 'پسند کرنا', 'نفرت کرنا', 'سمجھنا', 'سمجھانا', 'پوچھنا', 'بتانا', 'کام کرنا', 'کھیلنا', 'لڑنا', 'ہنسنا', 'رونا', 'مسکرانا', 'ملنا', 'ملانا', 'خریدنا', 'بیچنا', 'پہننا', 'اتارنا', 'کھولنا', 'بند کرنا', 'شروع کرنا', 'ختم کرنا', 'انتظار کرنا', 'یاد کرنا', 'بھولنا', 'سکھانا', 'سیکھنا', 'رہنا', 'مرنا', 'پیدا ہونا', 'بنانا', 'بگاڑنا', 'سوچنا', 'کوشش کرنا', 'مدد کرنا', 'دھونا', 'صاف کرنا', 'گرنا', 'پکڑنا', 'چھوڑنا', 'ڈھونڈنا', 'کھونا', 'بھیجنا', 'وصول کرنا', 'توڑنا', 'جوڑنا', 'جیتنا', 'ہارنا', 'ڈرنا', 'ڈالنا', 'نکالنا', 'چڑھنا', 'اترنا', 'داخل ہونا', 'باہر نکلنا', 'پہنچنا', 'بتانا', 'پکارنا', 'چلانا',
             'بہت', 'کم', 'تھوڑا', 'زیادہ', 'صرف', 'بھی', 'ہی', 'یہاں', 'وہاں', 'جدھر', 'ادھر', 'اب', 'ابھی', 'تب', 'جب', 'کب', 'پھر', 'جلدی', 'آہستہ', 'آرام سے', 'تیزی سے', 'زور سے', 'اوپر', 'نیچے', 'اندر', 'باہر', 'آگے', 'پیچھے', 'ساتھ', 'اکیلے', 'پاس', 'نزدیک', 'دور', 'پہلے', 'بعد میں', 'ہمیشہ', 'اکثر', 'کبھی کبھی', 'کبھی نہیں', 'شاید', 'یقیناً', 'ضرور', 'بلکل', 'تقریباً', 'خاص طور پر',
@@ -252,7 +249,8 @@
         let audioContext;
         let isLessonActive = false;
         let selectionTimeout;
-        
+        let isDragging = false;
+
         function initialize() {
             try {
                 audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -276,58 +274,118 @@
             allDOMElements.navHistory.addEventListener('click', () => showTab('history'));
             allDOMElements.navLearned.addEventListener('click', () => showTab('learned'));
             allDOMElements.navBasket.addEventListener('click', () => showTab('basket'));
-
-            // Improved text selection handling for both desktop and mobile
-            document.body.addEventListener('mousedown', (e) => {
+            
+            // Hybrid interaction model
+            const lessonArea = allDOMElements.lessonScreen;
+            lessonArea.addEventListener('mousedown', () => { isDragging = false; });
+            lessonArea.addEventListener('mousemove', () => { isDragging = true; });
+            lessonArea.addEventListener('mouseup', handleInteractionEnd);
+            
+            // For mobile
+            lessonArea.addEventListener('touchstart', () => { isDragging = false; }, { passive: true });
+            lessonArea.addEventListener('touchmove', () => { isDragging = true; }, { passive: true });
+            lessonArea.addEventListener('touchend', handleInteractionEnd);
+            
+            document.addEventListener('click', (e) => {
                 if (!allDOMElements.selectionPopup.contains(e.target)) {
                     allDOMElements.selectionPopup.classList.add('hidden');
                 }
             });
-            document.body.addEventListener('touchstart', () => {
-                 allDOMElements.selectionPopup.classList.add('hidden');
-            }, { passive: true });
-            
-            document.body.addEventListener('mouseup', handleSelectionEnd);
-            document.body.addEventListener('touchend', handleSelectionEnd);
-            
-            allDOMElements.lessonScreen.addEventListener('click', handleWordClick);
-        }
 
-        function handleSelectionEnd() {
-            clearTimeout(selectionTimeout);
-            selectionTimeout = setTimeout(() => {
-                const selection = window.getSelection();
-                const selectedText = selection.toString().trim();
-                
-                if (selectedText.length > 0 && selectedText.length < 150) {
-                     // Check if selection is within the lesson screen to avoid triggering everywhere
-                    if (allDOMElements.lessonScreen.contains(selection.anchorNode)) {
-                        showSelectionPopup(selection);
-                    }
-                } else {
-                    allDOMElements.selectionPopup.classList.add('hidden');
+            // Resume audio context on first user interaction
+            document.body.addEventListener('click', resumeAudioContext, { once: true });
+            document.body.addEventListener('touchend', resumeAudioContext, { once: true });
+        }
+        
+        function handleInteractionEnd(event) {
+            const selection = window.getSelection();
+            const selectedText = selection.toString().trim();
+
+            // Case 1: It was a drag-selection of a phrase
+            if (isDragging && selectedText.length > 0) {
+                event.preventDefault(); // Prevent click event from firing after drag
+                showSelectionPopup(selection);
+            }
+            // Case 2: It was a simple click/tap on a single word
+            else if (!isDragging && event.target.closest('.word-span, b')) {
+                const target = event.target.closest('.word-span, b');
+                const text = target.textContent.trim().replace(/[.,!?;:]/g, '');
+                if (text) {
+                    showWordActionModal(text);
                 }
-            }, 100); // Delay to allow selection to finalize on mobile
+            }
+            isDragging = false;
         }
 
         function showSelectionPopup(selection) {
+            const selectedText = selection.toString().trim();
+            if (!selectedText) return;
+
             const range = selection.getRangeAt(0);
             const rect = range.getBoundingClientRect();
+            const popup = allDOMElements.selectionPopup;
             
-            allDOMElements.selectionPopup.style.left = `${rect.left + window.scrollX + (rect.width / 2) - (allDOMElements.selectionPopup.offsetWidth / 2)}px`;
-            allDOMElements.selectionPopup.style.top = `${rect.top + window.scrollY - allDOMElements.selectionPopup.offsetHeight - 10}px`;
-            allDOMElements.selectionPopup.classList.remove('hidden');
+            popup.style.left = `${rect.left + window.scrollX + (rect.width / 2) - (popup.offsetWidth / 2)}px`;
+            popup.style.top = `${rect.top + window.scrollY - popup.offsetHeight - 10}px`;
+            popup.classList.remove('hidden');
 
-            const selectedText = selection.toString().trim();
-            const storyContainer = document.getElementById('story-container');
-            const mood = storyContainer ? storyContainer.dataset.mood : 'neutral';
+            const mood = document.getElementById('story-container')?.dataset.mood || 'neutral';
 
-            document.getElementById('popup-translate').onclick = () => { getTranslation(selectedText); allDOMElements.selectionPopup.classList.add('hidden'); };
-            document.getElementById('popup-speak').onclick = () => { speakText(selectedText, mood); allDOMElements.selectionPopup.classList.add('hidden'); };
-            document.getElementById('popup-phonetics').onclick = () => { getPhonetics(selectedText); allDOMElements.selectionPopup.classList.add('hidden'); };
-            document.getElementById('popup-save').onclick = () => { saveToBasket(selectedText); allDOMElements.selectionPopup.classList.add('hidden'); };
+            popup.querySelector('#popup-translate').onclick = () => { getTranslation(selectedText).then(res => res && showModal(`<p class="text-xl font-bold text-sky-600">${res}</p>`, `ترجمة: <span class="font-urdu text-xl">${selectedText}</span>`)); popup.classList.add('hidden'); };
+            popup.querySelector('#popup-speak').onclick = () => { speakText(selectedText, mood); }; // Don't hide popup
+            popup.querySelector('#popup-phonetics').onclick = () => { getPhonetics(selectedText).then(res => res && showModal(`<p class="text-xl font-bold text-sky-600">${res}</p>`, `النطق التقريبي لـ: <span class="font-urdu text-xl">${selectedText}</span>`)); popup.classList.add('hidden'); };
+            popup.querySelector('#popup-save').onclick = () => { saveToBasket(selectedText); popup.classList.add('hidden'); };
         }
 
+
+        function resumeAudioContext() {
+            if (audioContext && audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+        }
+
+        async function showWordActionModal(text) {
+            const mood = document.getElementById('story-container')?.dataset.mood || 'neutral';
+            
+            const modalTitle = `<span class="font-urdu text-3xl">${text}</span>`;
+            const modalContent = `<p class="text-slate-600">اختر الإجراء الذي تريده لهذه الكلمة.</p>`;
+
+            const actions = [
+                {
+                    text: '🇵🇰 ترجمة',
+                    class: 'action-translate-btn bg-blue-500 text-white',
+                    callback: async () => {
+                        const translation = await getTranslation(text);
+                        if (translation) {
+                           showModal(`<p class="text-xl font-bold text-sky-600">${translation}</p>`, `ترجمة: <span class="font-urdu text-xl">${text}</span>`);
+                        }
+                    }
+                },
+                {
+                    text: '🔊 نطق',
+                    class: 'action-speak-btn bg-green-500 text-white',
+                    callback: () => speakText(text, mood),
+                    keepOpen: true
+                },
+                {
+                    text: '🗣️ كتابة صوتية',
+                    class: 'action-phonetics-btn bg-purple-500 text-white',
+                    callback: async () => {
+                        const phonetics = await getPhonetics(text);
+                        if (phonetics) {
+                            showModal(`<p class="text-xl font-bold text-sky-600">${phonetics}</p>`, `النطق التقريبي لـ: <span class="font-urdu text-xl">${text}</span>`);
+                        }
+                    }
+                },
+                {
+                    text: '💾 حفظ للسلة',
+                    class: 'action-save-btn bg-amber-500 text-white',
+                    callback: () => saveToBasket(text)
+                }
+            ];
+
+            showModal(modalContent, modalTitle, actions);
+        }
 
         function loadState() {
             apiKey = localStorage.getItem('geminiApiKey_ur') || '';
@@ -425,7 +483,7 @@
                     const buttonClass = action.class.split(' ')[0];
                     if (e.target.classList.contains(buttonClass)) {
                         action.callback();
-                        if (!action.keepOpen) { // Only close if keepOpen is not true
+                        if (!action.keepOpen) { 
                             modalOverlay.remove();
                         }
                     }
@@ -763,41 +821,20 @@
             isLessonActive = true;
             showTab('home');
         }
-
-        function handleWordClick(event) {
-            const target = event.target;
-            if (target.classList.contains('word-span') || target.tagName === 'B') {
-                const word = target.textContent.trim().replace(/[.,!?;:]/g, '');
-                if (word) {
-                    getTranslation(word);
-                }
-            }
-        }
         
         async function getTranslation(text) {
             const prompt = `Translate the Urdu text "${text}" into a simple, direct Arabic equivalent. Provide only the translation, nothing else.`;
-            const translation = await callGeminiForSimpleText(prompt);
-            if (translation) {
-                const actions = [{
-                    text: '💾 حفظ في السلة',
-                    class: 'save-to-basket-btn bg-green-500 text-white hover:bg-green-600',
-                    callback: () => saveToBasket(text, translation)
-                }];
-                showModal(`<p class="text-xl font-bold text-sky-600">${translation}</p>`, `ترجمة: <span class="font-urdu text-xl">${text}</span>`, actions);
-            }
+            return await callGeminiForSimpleText(prompt, true);
         }
 
         async function getPhonetics(text) {
             const prompt = `اكتب النطق التقريبي لهذه الكلمة أو الجملة الأردية "${text}" باستخدام حروف عربية مبسطة. فقط أعط النطق ولا شيء آخر.`;
-            const phonetics = await callGeminiForSimpleText(prompt);
-            if (phonetics) {
-                showModal(`<p class="text-xl font-bold text-sky-600">${phonetics}</p>`, `النطق التقريبي لـ: <span class="font-urdu text-xl">${text}</span>`);
-            }
+            return await callGeminiForSimpleText(prompt, true);
         }
         
-        async function callGeminiForSimpleText(prompt) {
+        async function callGeminiForSimpleText(prompt, hideLoading) {
             if (!apiKey) { showModal('الرجاء حفظ مفتاح Gemini API أولاً.'); return null; }
-            showScreen(allDOMElements.loadingScreen);
+            if (!hideLoading) showScreen(allDOMElements.loadingScreen);
             try {
                 const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`, {
                     method: 'POST',
@@ -806,20 +843,19 @@
                 });
                 if (!response.ok) throw new Error('API Error');
                 const result = await response.json();
-                showTab(document.querySelector('[id^="nav-"][class*="border-sky-600"]').id.split('-')[1]); // Return to active tab
+                if (!hideLoading) showTab(document.querySelector('[id^="nav-"][class*="border-sky-600"]').id.split('-')[1]);
                 return result.candidates[0].content.parts[0].text.trim();
             } catch (error) {
                 console.error('Error with simple text generation:', error);
                 showModal('حدث خطأ أثناء التواصل مع الذكاء الاصطناعي.');
-                showTab(document.querySelector('[id^="nav-"][class*="border-sky-600"]').id.split('-')[1]); // Return to active tab
+                if (!hideLoading) showTab(document.querySelector('[id^="nav-"][class*="border-sky-600"]').id.split('-')[1]);
                 return null;
             }
         }
 
         async function saveToBasket(urduText, arabicText) {
             if (!arabicText) {
-                const prompt = `Translate the Urdu text "${urduText}" into a simple, direct Arabic equivalent. Provide only the translation, nothing else.`;
-                arabicText = await callGeminiForSimpleText(prompt);
+                arabicText = await getTranslation(urduText);
                 if (!arabicText) {
                      showModal('لم يتم العثور على ترجمة.');
                      return;
@@ -847,7 +883,7 @@
                 ? '<p class="text-center text-slate-500">لم تتعلم أي كلمات بعد. ابدأ درساً جديداً!</p>'
                 : `<div class="grid grid-cols-2 md:grid-cols-4 gap-3">
                     ${[...learnedWords].sort().map(word => `
-                        <div class="font-urdu text-lg p-3 border rounded-md text-center cursor-pointer hover:bg-sky-100" onclick="handleLearnedWordClick('${word}')">
+                        <div class="font-urdu text-lg p-3 border rounded-md text-center cursor-pointer hover:bg-sky-100" onclick="showWordActionModal('${word}')">
                             ${word}
                         </div>
                     `).join('')}
@@ -857,14 +893,6 @@
 
             if (learnedWords.length >= 15) {
                 document.getElementById('review-lesson-btn').addEventListener('click', handleRevisionLesson);
-            }
-        }
-        
-        async function handleLearnedWordClick(word) {
-            const prompt = `Translate the Urdu word "${word}" into a simple, direct Arabic equivalent. Provide only the translation.`;
-            const translation = await callGeminiForSimpleText(prompt);
-            if(translation) {
-                saveToBasket(word, translation);
             }
         }
 
@@ -963,6 +991,7 @@
         }
 
         async function speakText(text, mood = 'neutral') {
+            resumeAudioContext();
             if (!apiKey || !audioContext) {
                 showModal('ميزة الصوت غير متاحة. يرجى التحقق من مفتاح API أو دعم المتصفح.');
                 return;
@@ -1102,48 +1131,36 @@
             }
             `;
             
-            showScreen(allDOMElements.loadingScreen);
-            try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
-                });
-                if (!response.ok) throw new Error('API Error');
-                const result = await response.json();
-                const text = result.candidates[0].content.parts[0].text;
-                const jsonString = text.replace(/```json/g, '').replace(/```/g, '').trim();
-                const letterData = JSON.parse(jsonString);
+            const letterData = await callGeminiForSimpleText(prompt, false);
+            if (letterData) {
+                try {
+                    const parsedData = JSON.parse(letterData);
+                    const modalContent = `
+                        <div class="text-right space-y-4">
+                            <p><strong class="font-bold">اسم الحرف:</strong> ${parsedData.letter_name}</p>
+                            <p><strong class="font-bold">كيفية النطق:</strong> ${parsedData.pronunciation_guide}</p>
+                            <hr>
+                            <p class="text-lg"><strong class="font-bold">مثال:</strong> <span class="font-urdu text-2xl">${parsedData.example_word}</span> (${parsedData.example_word_translation})</p>
+                        </div>
+                    `;
+                    
+                    const actions = [{
+                        text: `🔊 نطق الحرف`,
+                        class: 'speak-letter-btn bg-sky-500 text-white hover:bg-sky-600',
+                        callback: () => speakText(letter),
+                        keepOpen: true
+                    }, {
+                        text: `🔊 نطق المثال`,
+                        class: 'speak-example-btn bg-green-500 text-white hover:bg-green-600',
+                        callback: () => speakText(parsedData.example_word),
+                        keepOpen: true
+                    }];
 
-                showTab('alphabet'); // Return to alphabet tab
-                
-                const modalContent = `
-                    <div class="text-right space-y-4">
-                        <p><strong class="font-bold">اسم الحرف:</strong> ${letterData.letter_name}</p>
-                        <p><strong class="font-bold">كيفية النطق:</strong> ${letterData.pronunciation_guide}</p>
-                        <hr>
-                        <p class="text-lg"><strong class="font-bold">مثال:</strong> <span class="font-urdu text-2xl">${letterData.example_word}</span> (${letterData.example_word_translation})</p>
-                    </div>
-                `;
-                
-                const actions = [{
-                    text: `🔊 نطق الحرف`,
-                    class: 'speak-letter-btn bg-sky-500 text-white hover:bg-sky-600',
-                    callback: () => speakText(letter),
-                    keepOpen: true
-                }, {
-                    text: `🔊 نطق المثال`,
-                    class: 'speak-example-btn bg-green-500 text-white hover:bg-green-600',
-                    callback: () => speakText(letterData.example_word),
-                    keepOpen: true
-                }];
-
-                showModal(modalContent, `تعلم حرف <span class="font-urdu text-3xl">${letter}</span>`, actions);
-
-            } catch (error) {
-                console.error('Error getting letter info:', error);
-                showTab('alphabet');
-                showModal('حدث خطأ أثناء جلب معلومات الحرف.');
+                    showModal(modalContent, `تعلم حرف <span class="font-urdu text-3xl">${letter}</span>`, actions);
+                } catch(e) {
+                    console.error("Failed to parse letter info JSON", e);
+                    showModal("حدث خطأ في عرض معلومات الحرف.");
+                }
             }
         }
 
